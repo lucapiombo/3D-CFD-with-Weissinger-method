@@ -1,11 +1,11 @@
-function [x, y, z, x_v, y_v, z_v, x_c, y_c, z_c, n,X_c,Y_c,Z_c] = geometry(c, b, N, M, sweepAngle)
+function geom = geometry(c, b, N, M, sweepAngle)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %CREATE THE GEOMETRY:
 
 %INPUTS: chord (c), span (b), Number of panels in chord-direction (N) and
 %half of the ones in the span-direction (M), sweep angle (sweepAngle)
 
-%OUTPUTS: coordinates for extrema of the panels (x,y,z), extrema of horseshoe
+%OUTPUTS: struc containing extrema of the panels (x,y,z), extrema of horseshoe
 %vortices (x_v,y_v,z_v) at 1/4 of the panel, control points (x_c,y_c,z_c)
 %at 3/4 of the panel, the normal to each panel (n) and the coordinates of
 %the center of each panel (X_c,Y_c,Z_c)
@@ -15,7 +15,6 @@ function [x, y, z, x_v, y_v, z_v, x_c, y_c, z_c, n,X_c,Y_c,Z_c] = geometry(c, b,
 %point in position (i,j) of the panelled wing)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
 % Extrema of the panels:
 x = linspace(0, c, N+1);
 y = linspace(-b/2, b/2, 2*M+1);
@@ -24,8 +23,6 @@ z = zeros(1, (2 * M + 1) * (N + 1));
 x = x';
 y = y';
 z = reshape(z, [N+1, 2*M+1]);
-
-
 
 % Panel length
 k=1;
@@ -45,9 +42,6 @@ end
 x_panel = reshape(x_panel,[2 * M+1, N])';
 y_panel = reshape(y_panel,[2 * M, N+1])';
 
-
-
-
 % Vortex extrema:
 for i = 1:N
     for j = 1:(2*M+1)
@@ -56,8 +50,6 @@ for i = 1:N
         z_v(i,j) = z(i,j);
     end
 end
-
-
 
 % Centroid coordinates:
 for i = 1:N
@@ -68,8 +60,6 @@ for i = 1:N
     end
 end
 
-
-
 %Centre of panels:
 for i = 1:N
     for j = 1:2*M
@@ -78,8 +68,6 @@ for i = 1:N
         Z_c(i,j) = z(i,j);
     end
 end
-
-
 
 % Apply sweep angle to the wing
 x(:,1:(size(x,2)/2)) = x(:,1:(size(x,2)/2)) - tan(sweepAngle) * y(:,1:(size(x,2)/2));
@@ -91,8 +79,31 @@ x_v(:,(size(x_v,2)/2+1):end) = x_v(:,(size(x_v,2)/2+1):end) + tan(sweepAngle) * 
 X_c(:,1:(size(X_c,2)/2)) = X_c(:,1:(size(X_c,2)/2)) - tan(sweepAngle) * Y_c(:,1:(size(X_c,2)/2));
 X_c(:,(size(X_c,2)/2+1):end) = X_c(:,(size(X_c,2)/2+1):end) + tan(sweepAngle) * Y_c(:,(size(X_c,2)/2+1):end);
 
-
 % Normal
 n = [0, 0, 1]; %if you want to add a dihedral/twist angle you have to account for a different normal
 
+% Return as an organized struct
+geom = struct( ...
+    'panels', struct( ...
+        'x', x, ...
+        'y', y, ...
+        'z', z ...
+        ), ...
+    'vortices', struct( ...
+        'x', x_v, ...
+        'y', y_v, ...
+        'z', z_v ...
+        ), ...
+    'centroids', struct( ...
+        'x', x_c, ...
+        'y', y_c, ...
+        'z', z_c ...
+        ), ...
+    'centers', struct( ...
+        'x', X_c, ...
+        'y', Y_c, ...
+        'z', Z_c ...
+        ), ...
+    'normal', n ...
+);
 end

@@ -1,14 +1,25 @@
-function [A,b] = scratc_system(x_c,y_c,z_c,x_v,y_v,z_v,n,U_infinity,GAMMA)
+function [A,b] = scratc_system(geom,U_infinity,GAMMA)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %COMPUTE THE SYSTEM COEFFICIENT:
 
 %INPUTS: coordinates for extrema of the panels (x,y,z), extrema of horseshoe
-%vortices (x_v,y_v,z_v) at 1/4 of the panel, control points (x_c,y_c,z_c)
+%vortices (geom.vortices.x,geom.vortices.y,geom.vortices.z) at 1/4 of the panel, control points (geom.centroids.x,geom.centroids.y,geom.centroids.z)
 %at 3/4 of the panel, the normal to each panel (n), streamflow vector 
 %(U_infinity) and the gamma of the vortex (GAMMA)
 
 %OUTPUTS: Coefficient of the A-matrix (A) and b-vector (b)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Extract variables
+n = geom.normal;
+x_c = geom.centroids.x(:);
+y_c = geom.centroids.y(:);
+z_c = geom.centroids.z(:);
+
+x_v = geom.vortices.x;
+y_v = geom.vortices.y;
+z_v = geom.vortices.z;
+
+
 x_c = reshape(x_c',1,[]);
 y_c = reshape(y_c',1,[]);
 z_c = reshape(z_c',1,[]);

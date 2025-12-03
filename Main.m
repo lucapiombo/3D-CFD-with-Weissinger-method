@@ -25,29 +25,7 @@ U_infinity = [U*cos(AoA)*cos(beta), -U*sin(beta), U*sin(AoA)*cos(beta)];
 geom = geometry(c,b_span,N,M,Sweep);
 
 % Plot geometry 3D
-px = geom.panels.x;
-py = geom.panels.y;
-pz = geom.panels.z;
-
-cx = geom.centroids.x;
-cy = geom.centroids.y;
-cz = geom.centroids.z;
-
-vx = geom.vortices.x;
-vy = geom.vortices.y;
-vz = geom.vortices.z;
-
-figure()
-surf(px, py, pz)
-hold on
-plot3(cx, cy, cz,'*b')
-plot3(vx, vy, vz, '*r')
-xlabel('x','FontSize', 10,'fontweight','bold')
-ylabel('y','FontSize', 10,'fontweight','bold')
-zlabel('z','FontSize', 10,'fontweight','bold')
-axis equal
-zlim([-2,3])
-hold off
+plot3Dgeometry(geom)
 
 
 %% SOLVE GAMMA:
@@ -57,99 +35,24 @@ GAMMA = reshape(GAMMA,[2*M,N])';
 
 %% POST PROCESSING:
 %Compute all the aerdynamic loads:
-[F,Moment,C_L,C_D,C_M,Cp] = aerodynamic_paramiters(geom,N,M,GAMMA,rho,U_infinity);
+[F,M,C_L,C_D,C_M,Cp] = aerodynamic_paramiters(geom,N,M,GAMMA,rho,U_infinity);
 
 L_total = F(3);
 D_total = F(1);
 C_L_total = L_total/(0.5*rho*c*b_span*norm(U_infinity)^2);
 C_D_total = D_total/(0.5*rho*c*b_span*norm(U_infinity)^2);
-C_M_total = - Moment(2)/(0.5*rho*c^2*b_span*norm(U_infinity)^2);
+C_M_total = - M(2)/(0.5*rho*c^2*b_span*norm(U_infinity)^2);
 
 
-%FIGURES: 
+%% Figures 
+plotData = struct( ...
+    'Cp', Cp, ...
+    'gamma', GAMMA, ...
+    'C_D', C_D, ...
+    'C_L', C_L ...
+);
 
-%---------------- Cp Spanwise direction -----------------
-%WING:
-figure()
-hold on
-title('C_p distribution at 1/4 chord','FontSize', 15)
-% for i = 1:N
-    plot(cy(round(N/4),:),Cp(round(N/4),:), '--ob') 
-% end
-xlabel('Span','FontSize', 10,'fontweight','bold')
-ylabel('C_p','FontSize', 10,'fontweight','bold')
-grid on
-hold off
-% saveas(gcf, 'Cp single wing','png')
-
-%% ---------------- Cp Chordwise direction -----------------
-%WING:
-figure()
-hold on
-title('C_p distribution','FontSize', 15)
-for i = 1:M
-    plot(cx(:,i),Cp(:,i))
-end
-grid on
-xlabel('Chord','FontSize', 10,'fontweight','bold')
-ylabel('C_p','FontSize', 10,'fontweight','bold')
-hold off
-
-
-%%
-%---------------- C_L Spanwise direction -----------------
-figure()
-hold on
-% for i = 1:N
-    plot(cy(6,:),C_L(6,:),'-o')
-% end
-grid on
-xlabel('Span','FontSize', 10,'fontweight','bold')
-ylabel('C_L','FontSize', 10,'fontweight','bold')
-title('C_L distribution along the span','FontSize', 15)
-% saveas(gcf, 'CL single wing','png')
-
-%%
-%---------------- C_D Spanwise direction -----------------
-figure()
-hold on
-for i = 1:N
-    plot(cy(i,:),C_D(i,:))
-end
-grid on
-xlabel('Span','FontSize', 10,'fontweight','bold')
-ylabel('C_D','FontSize', 10,'fontweight','bold')
-title('C_D distribution along the span','FontSize', 15)
-% saveas(gcf, 'CD single wing','png')
-
-
-%%
-%---------------- GAMMA distribution: -----------------
-%COLOR PANELS:
-figure()
-surf(px,py,pz,GAMMA)
-hold on
-colorbar
-title('GAMMA','FontSize', 15)
-xlabel('x','FontSize', 10,'fontweight','bold')
-ylabel('y','FontSize', 10,'fontweight','bold')
-zlabel('z','FontSize', 10,'fontweight','bold')
-axis equal
-zlim([-2,3])
-hold off
-% saveas(gcf, 'GAMMA wing','png')
-
-
-%Show GAMMA in spanwise:
-figure()
-hold on
-for i = 1:N
-    plot(cy(i,:),GAMMA(i,:),'-o')
-end
-grid on
-xlabel('Span','FontSize', 10,'fontweight','bold')
-ylabel('GAMMA','FontSize', 10,'fontweight','bold')
-title('Gamma distribution along the span','FontSize', 15)
+plotFigures(plotData, geom)
 
 
 %% VALIDATION (uncommend when you have XFLR5 data):

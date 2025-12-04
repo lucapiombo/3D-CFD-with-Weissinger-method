@@ -6,6 +6,9 @@ This project aims to perform a comprehensive analysis of a three-dimensional aer
 
 The primary objective is to design a finite wing that minimizes induced drag while maintaining a fixed angle of attack and achieving a specified range of lift coefficient values (cL). Additionally, the effect of a tail is considered to reduce the wing's pitching moment, with analyses performed both with and without ground effects. The methodology has been implemented in MATLAB, and its validation has been carried out using XFLR5.
 
+An example of the code is reported below:
+![Alt text](results/imageExample.png)
+
 ## Project Structure
 
 The repository contains several files along with three main scripts, each corresponding to a different configuration:

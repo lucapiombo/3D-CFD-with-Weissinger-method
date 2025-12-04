@@ -5,9 +5,9 @@ addpath('functions');
 %---------- WING GEOMETRY: ----------
 c = 3;       %chord
 b_span = 18; %wing span
-N = 5;      %Number panels in chord direction
-M = 6;      %Number panels in half wing (wing span direction) EVEN!!!
-Sweep = deg2rad(0); %Sweep angle
+N = 10;      %Number panels in chord direction
+M = 30;      %Number panels in half wing (wing span direction) EVEN!!!
+Sweep = deg2rad(3); %Sweep angle
 
 %---------- FLOW: ----------
 AoA = deg2rad(1);   %angle of attack
@@ -26,12 +26,12 @@ wing = geometry(c,b_span,N,M,Sweep);
 plot3Dgeometry(wing)
 
 %% SOLVE GAMMA:
-[A,b] = scratc_system(wing,U_infinity,1);
+[A,b] = scratc_system(wing, wing, U_infinity, 1);
 GAMMA = A\b;
 GAMMA = reshape(GAMMA,[2*M,N])';
 
 %% POST PROCESSING:
-[F,M,C_L,C_D,C_M,Cp] = aerodynamic_paramiters(wing,N,M,GAMMA,rho,U_infinity);
+[F,M,C_L,C_D,C_M,Cp] = aerodynamic_paramiters(wing, N, M, GAMMA, rho, U_infinity);
 
 L_total = F(3);
 D_total = F(1);

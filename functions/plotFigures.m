@@ -167,7 +167,7 @@ end
 
 function plotCLSpanwise(plotData, geom)
     [~, M] = size(plotData.Cp);
-    mid_span_idx = min(6, M);
+    mid_span_idx = min(2, M);
     
     plot(geom.centroids.y(mid_span_idx, :), ...
          plotData.C_L(mid_span_idx, :), ...

@@ -7,7 +7,7 @@ c_wing = 3; %chord
 b_wing = 21; %wing span
 N_wing = 20; %Number panels in chord direction
 M_wing = 20; %Number panels in half wing (wing span direction) EVEN!!!
-Sweep_wing = deg2rad(0); %Sweep angle
+Sweep_wing = deg2rad(20); %Sweep angle
 h_wing = 3; %height
 
 %---------- TAIL GEOMETRY: ----------
@@ -15,7 +15,7 @@ c_tail = 1.5; %chord
 b_tail = 6; %wing span
 N_tail = 20; %Number panels in chord direction
 M_tail = 20; %Number panels in half wing (wing span direction) EVEN!!!
-Sweep_tail = deg2rad(0); %Sweep angle
+Sweep_tail = deg2rad(10); %Sweep angle
 h_tail = 2.5;
 
 %---------- DISTANCE TAIL-WING: ----------

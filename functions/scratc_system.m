@@ -1,4 +1,4 @@
-function [A,b] = scratc_system(geom,U_infinity,GAMMA)
+function [A,b] = scratc_system(geom1, geom2,U_infinity,GAMMA)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %COMPUTE THE SYSTEM COEFFICIENT:
 
@@ -10,14 +10,14 @@ function [A,b] = scratc_system(geom,U_infinity,GAMMA)
 %OUTPUTS: Coefficient of the A-matrix (A) and b-vector (b)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Extract variables
-n = geom.normal;
-x_c = geom.centroids.x(:);
-y_c = geom.centroids.y(:);
-z_c = geom.centroids.z(:);
+n = geom1.normal;
+x_c = geom1.centroids.x(:);
+y_c = geom1.centroids.y(:);
+z_c = geom1.centroids.z(:);
 
-x_v = geom.vortices.x;
-y_v = geom.vortices.y;
-z_v = geom.vortices.z;
+x_v = geom2.vortices.x;
+y_v = geom2.vortices.y;
+z_v = geom2.vortices.z;
 
 
 x_c = reshape(x_c',1,[]);
